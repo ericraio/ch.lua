@@ -1,6 +1,5 @@
 local socket = require('socket')
 local io = require('io')
-require 'table'
 
 local tsweights = {
                     {  '5' , 61  }, {  '7' , 61  }, {  '6' , 61  }, {  '8' , 61  },
