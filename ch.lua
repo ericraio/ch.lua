@@ -114,6 +114,7 @@ function loop()
   end
   print("Error in Loop: "..err)
 
+  running = false
   return false -- TODO: Handle "proper" shutdowns
 end
 
