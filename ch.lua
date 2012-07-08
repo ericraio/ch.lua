@@ -1,24 +1,15 @@
 local socket = require('socket')
 local io = require('io')
+require 'table'
 
-local tsweights = {
-                    {  '5' , 61  }, {  '7' , 61  }, {  '6' , 61  }, {  '8' , 61  },
-                    { '16' , 6   }, { '17' , 61  }, {  '9' , 90  }, { '11' , 90  },
-                    { '13' , 90  }, { '14' , 90  }, { '15' , 90  }, { '23' , 110 },
-                    { '24' , 110 }, { '25' , 110 }, { '28' , 104 }, { '29' , 104 },
-                    { '30' , 104 }, { '31' , 104 }, { '32' , 104 }, { '33' , 104 },
-                    { '35' , 101 }, { '36' , 101 }, { '37' , 101 }, { '38' , 101 },
-                    { '39' , 101 }, { '41' , 101 }, { '40' , 101 }, { '42' , 101 },
-                    { '43' , 101 }, { '44' , 101 }, { '45' , 101 }, { '46' , 101 },
-                    { '47' , 101 }, { '48' , 101 }, { '49' , 101 }, { '50' , 101 }
-                 }
+local tsweights = {{'5', 61}, {'6', 61}, {'7', 61}, {'8', 61}, {'16', 61}, {'17', 61}, {'9', 90}, {'11', 90}, {'13', 90}, {'14', 90}, {'15', 90}, {'23', 110}, {'24', 110}, {'25', 110}, {'28', 104}, {'29', 104}, {'30', 104}, {'31', 104}, {'32', 104}, {'33', 104}, {'35', 101}, {'36', 101}, {'37', 101}, {'38', 101}, {'39', 101}, {'40', 101}, {'41', 101}, {'42', 101}, {'43', 101}, {'44', 101}, {'45', 101}, {'46', 101}, {'47', 101}, {'48', 101}, {'49', 101}, {'50', 101}, {'57', 110}, {'58', 110}, {'59', 110}, {'60', 110}, {'61', 110}, {'62', 110}, {'63', 110}, {'64', 110}, {'65', 110}, {'66', 110}}
 
 function connect(network, port)
   client = socket.tcp()
+  client:settimeout(300) -- 5 minute timeout
   local result, err = client:connect(network, port)
   if err then print("Connection Error: "..err) end
   print("Connection Result: "..result)
-  client:settimeout(300) -- 5 minute timeout
 end
 
 function increment(table, key, value)
@@ -81,7 +72,7 @@ end
 function authenticate(room)
   local authenticate_order = {"bauth", room, generate_uid()}
   print(table.concat(authenticate_order, ':'))
-  return client:send(table.concat(authenticate_order, ':'))
+  return client:send(table.concat(authenticate_order, ':') .. '\0')
 end
 
 function login(user_name, password)
@@ -97,10 +88,9 @@ end
 
 function send(...)
   local args = {...}
-  print(table.concat(args, ':') .. '\r\n\x00')
-  return client:send(table.concat(args, ':') .. '\r\n\x00')
+  print(table.concat(args, ':') .. '\r\n\0')
+  return client:send(table.concat(args, ':') .. '\r\n\0')
 end
-
 
 function loop()
   while not err do
