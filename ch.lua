@@ -91,7 +91,7 @@ end
 function generate_uid()
   local num1 = math.random(10^7, 10^8)
   local num2 = math.random(10^7, 10^8)
-  uid = tostring(num1..num2)
+  uid = tostring(num1)..tostring(num2)
   return uid
 end
 
