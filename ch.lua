@@ -97,8 +97,8 @@ end
 
 function send(...)
   local args = {...}
-  print(table.concat(args, ':') .. '\r\n\x00')
-  return client:send(table.concat(args, ':') .. '\r\n\x00')
+  print(table.concat(args, ':') .. '\r\n\0')
+  return client:send(table.concat(args, ':') .. '\r\n\0')
 end
 
 
