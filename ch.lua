@@ -17,21 +17,17 @@ local tsweights = {
 
 function connect(network, port)
   client = socket.tcp()
-  client:settimeout(300) -- 5 minute timeout
   local result, err = client:connect(network, port)
   if err then print("Connection Error: "..err) end
   print("Connection Result: "..result)
-end
-
-function increment(table, key, value)
-  table[key] = table[key] + (value or 1)
+  client:settimeout(300) -- 5 minute timeout
 end
 
 function get_server(room)
   local group = room:gsub("-", "q")
   local fnv = tonumber(string.sub(group, 1, 5), 36)
   local lnv = string.sub(room, 7, (6 + string.len(string.sub(room, 1, 3))))
-  local maxnum = 3386
+  local maxnum = _.reduce(_.map(tsweights, function(x) return x[2] end), 0, function(memo, i) return memo + i end)
 	local cumfreq = 0
 	local sn = 0
 
@@ -54,7 +50,7 @@ function get_server(room)
     end
   end
   print('Server: '..'s'.. sn ..'.chatango.com')
-  return 's' .. sn .. '.chatango.com'
+  return 's' .. 65 .. '.chatango.com'
 end
 
 function get_room()
@@ -81,7 +77,7 @@ function get_password()
 end
 
 function authenticate(room)
-  local authenticate_order = {"bauth", room, generate_uid()}
+  local authenticate_order = {"bauth", room, generate_uid(), 'atr0sity', 'c0llegato'}
   print(table.concat(authenticate_order, ':'))
   return client:send(table.concat(authenticate_order, ':') .. '\0')
 end
