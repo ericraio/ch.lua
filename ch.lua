@@ -77,7 +77,7 @@ function get_password()
 end
 
 function authenticate(room)
-  local authenticate_order = {"bauth", room, generate_uid(), 'atr0sity', 'c0llegato'}
+  local authenticate_order = {"bauth", room, generate_uid()}
   print(table.concat(authenticate_order, ':'))
   return client:send(table.concat(authenticate_order, ':') .. '\0')
 end
